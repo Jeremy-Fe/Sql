@@ -229,5 +229,115 @@ where 	s.dept_id = d.dept_id and d.dept_name = '컴퓨터공학과';
 		
 SELECT * FROM cs_student;
 
-INSERT INTO V_TAKES 
-VALUES ('1292502','C101-01')
+INSERT INTO V_TAKES VALUES ('1292502','C101-01');
+
+SELECT * FROM V_TAKES
+
+DROP VIEW V_TAKES ;
+
+CREATE OR REPLACE VIEW v_takes AS
+SELECT stu_id, class_id
+FROM TAKES
+WITH READ ONLY;
+
+--INSERT INTO v_takes VALUES ('1292502', 'C101-01');
+
+SELECT * FROM dual;
+
+SELECT sysdate FROM dual;
+
+SELECT ename, hiredate, to_number(to_char(hiredate, 'YYYY')) 입사년도,
+TO_NUMBER(to_char(hiredate, 'MM')) 입사월, 
+TO_NUMBER(to_char(hiredate, 'DD')) 입사일 
+FROM emp;
+
+SELECT TO_char(sysdate, 'YYYY/MM/DD') 날짜,
+to_char(sysdate, 'YYYY.MON.DAY') 문자형
+FROM dual;
+
+
+SELECT ename, sal
+FROM emp;
+
+SELECT ename,
+CASE WHEN sal > 2000
+THEN sal
+ELSE 2000
+END revised_salary
+FROM emp;
+
+SELECT loc,
+CASE loc
+WHEN 'NEW YORK' THEN  'EAST'
+WHEN 'BOSTON' THEN 'EAST'
+WHEN 'CHICAGO' THEN 'CENTER'
+WHEN 'DALLAS' THEN 'CENTER'
+ELSE 'ETC'
+END AS AREA
+FROM dept;
+
+SELECT loc,
+decode(loc,
+'NEW YORK', 'EAST',
+'BOSTON', 'EAST',
+'DALLAS', 'CENTER',
+'CHICAGO', 'CENTER') area
+FROM dept;
+
+SELECT ename,
+CASE WHEN sal >= 3000 THEN 'high'
+WHEN sal >= 1000 THEN 'mid'
+else 'low'
+END AS salary_grade
+FROM emp;
+
+SELECT *
+FROM emp;
+
+SELECT empno, ename, sal, comm, sal+COMM
+FROM emp;
+
+
+SELECT empno, ename, sal, nvl(comm, 0) FROM emp;
+
+SELECT empno, ename, sal,
+CASE WHEN comm IS NULL
+THEN 0
+ELSE comm
+END AS commission
+FROM emp;
+
+SELECT empno, ename, sal, COMM , sal+nvl(comm, 0) 합계
+FROM emp;
+
+
+SELECT * FROM EMP
+WHERE rownum <= 5;
+
+SELECT *
+FROM (
+SELECT ename 사원, sal 급여, comm 보너스, sal+nvl(comm, 0) 합계
+FROM EMP
+ORDER BY 4 DESC , ename
+)
+WHERE rownum <= 5;
+
+SELECT * FROM emp
+WHERE sal BETWEEN 1500 AND 2500;
+
+SELECT dname, job, count(*) "Total Empl", sum(sal) "Total sal"
+FROM emp, DEPT
+WHERE dept.deptno = emp.DEPTNO 
+GROUP BY dname, job;
+
+SELECT nvl(dname, '[Total]') 부서 , nvl(JOB , '[Total]') 직책,
+count(*) "Total Empl",
+sum(sal) "Total Sal"
+FROM emp, DEPT
+WHERE dept.deptno = emp.DEPTNO 
+GROUP BY ROLLUP (dname, job)
+ORDER BY dname, job;
+
+
+SELECT *
+FROM emp;
